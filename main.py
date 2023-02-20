@@ -1,15 +1,17 @@
 # Import stack
 import mysql.connector
-import datetime
 from datetime import date
 import requests
-import webbrowser
 
 """
 #TODO
     Connect http methonds
     create git ignore
-    FIX VALIDATOR
+    FIX VALIDATOR for email and positions
+    ADD Functionalty to edit and delete button on Employee table.
+    Remove Array from html
+    Fix valid date on Hire page
+    Add CSS TO Employee table
 """
 
 # Initialize SQL Database
