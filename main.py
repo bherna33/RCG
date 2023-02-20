@@ -1,5 +1,7 @@
+# Import stack
 import mysql.connector
 import datetime
+from datetime import date
 import requests
 import webbrowser
 
@@ -10,58 +12,37 @@ import webbrowser
     FIX VALIDATOR
 """
 
-
-mydb = mysql.connector.connect(
+# Initialize SQL Database
+database = mysql.connector.connect(
     host = "localhost",
     user = "branden",
     password = "T3chn0l0gy",
     database = "Employee"
 )
 
-if mydb:
-    print("sucessfull")
-else:
-    print("oh no, I'm not conntected")
 
-curser = mydb.cursor()
+curser = database.cursor()
 
-# curser.execute("INSERT INTO Employee"
-#                "(person_id, first_name, last_name, email_address, hire_date, job_title, agency_num, registration_date)"
-#                "VALUES ('7', 'branden','hernandez','b@t.com','2023-02-19','aa','2','2023-02-18')")
 
+# Gets and views data from Employees table
 curser.execute("SELECT * FROM Employee")
+results = curser.fetchall()
 
-resuts = curser.fetchall()
+# array to store data
+data = []
 
-p = []
-
-tbl ="<tr><th>ID</th> <th>First Name</th> <th>Last Name</th> <th>Email</th> <th>Hire Date</th> <th>Job Title</th> <th>Agency Number</th> <th>Regrisdtation Date</th> <th>Edit</th><th>Delete</th></tr>"
-
+#loop through results and makes data nice.
+for row in results:
+    data.append("<tr>")
+    for values in row:
+        data.append(f"<td>{values}</td>")
+        
+    data.append('<td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>')
+    data.append('<td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td></tr>')
     
-
-for row in resuts:
-    a = "<tr><td>%s</td>"%row[0]
-    p.append(a)
-    b = "<td>%s</td>"%row[1]
-    p.append(b)
-    c = "<td>%s</td>"%row[2]
-    p.append(c)
-    d = "<td>%s</td>"%row[3]
-    p.append(d)
-    e = "<td>%s</td>"%row[4]
-    p.append(e)
-    f = "<td>%s</td>"%row[5]
-    p.append(f)
-    j = "<td>%s</td>"%row[6]
-    p.append(j)
-    k = "<td>%s</td>"%row[7]
-    p.append(k)
-    l = '<td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>'
-    p.append(l)
-    q = '<td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td></tr>'
-    p.append(q)
     
-contents = '''<!DOCTYPE html>
+# builds html page to store table. 
+contents = f'''<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -84,10 +65,23 @@ contents = '''<!DOCTYPE html>
                 
               <table id="mytable" class="table table-bordred table-striped">
 
-%s
+                <tr>
+                <th>ID</th> 
+                <th>First Name</th> 
+                <th>Last Name</th> 
+                <th>Email</th> 
+                <th>Hire Date</th> 
+                <th>Job Title</th> 
+                <th>Agency Number</th> 
+                <th>Regrisdtation Date</th> 
+                <th>Edit</th>
+                <th>Delete</th>
+                </tr>
+
  <tbody>
     
-%s    
+{data}    
+
     </tbody>
         
                 </table>            
@@ -96,38 +90,48 @@ contents = '''<!DOCTYPE html>
 </div>
 </body>
 </html>
-'''%(tbl, p)
+'''
 
+# set file name to table.html
 filename = 'table.html'
 
-# curser.execute("INSERT INTO Employee"
-#                "(person_id, first_name, last_name, email_address, hire_date, job_title, agency_num, registration_date)"
-#                "VALUES ('2', 'branden','hernandez','b@t.com','2023-02-19','aa','2','2023-02-18')")
+
+# deletes employee by id number
+def delete(person_id):
+    curser.execute(f"DELETE FROM Employee WHERE person_id = '{person_id}'; ")
+ 
+
+# updates employee by id 
+def update(person_id, set_by):
+    
+    # loop through dictinary to get column, value
+    for key, val in set_by.items():
+        curser.execute(f"UPDATE Employee SET '{key}' = '{val}' WHERE person_id = '{person_id}';")
 
 
-# curser.execute("DELETE FROM Employee WHERE person_id = '2'; ")
+# insert data to sql
+def insert(person_id, first_name, last_name, email_address, hire_date, job_title, agency_num):
+    curser.execute("INSERT INTO Employee"
+               "(person_id, first_name, last_name, email_address, hire_date, job_title, agency_num, registration_date)"
+               f"VALUES ('{person_id}', '{first_name}','{last_name}','{email_address}','{hire_date}','{job_title}','{agency_num}','{date.today()}')")
 
-# curser.execute("UPDATE Employee SET first_name = 'justyn' WHERE person_id = '1';")
 
 
-
-mydb.commit()
+payload = {"person_id": "", "first_name":"", "last_name":"", "email_address":"", "hire_date":"", "job_title":"", "agency_num":""}
+# response = requests.get("https://bherna33.github.io/RCG/get")
+response = requests.post("http://127.0.0.1:5500/index.html/post", data=payload)
+print(response)
 
 
 def main(contents, filename):
+    
+    # write to file 
     output = open(filename,"w")
     output.write(contents)
     output.close()
+    
+    # closes data base
+    database.commit()
+    database.close()
 
-main(contents, filename)    
-webbrowser.open(filename)
-
-if(mydb.is_connected()):
-    curser.close()
-    mydb.close()
-    print("MySQL connection is closed.") 
-
-
-# api = "https://www.geeksforgeeks.org/get-post-requests-using-python/"
-# responce = requests.get(api)
-# print(responce.json())
+main(contents, filename)
