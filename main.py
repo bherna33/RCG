@@ -79,7 +79,7 @@ contents = '''<!DOCTYPE html>
 		        
         <div class="col-md-12">
         <h4>Employee Table</h4>
-        <a href="/index.html"class="btn btn-primary float-right" role="button">New Employee</a>
+        <a href="index.html"class="btn btn-primary float-right" role="button">New Employee</a>
         <div class="table-responsive">
                 
               <table id="mytable" class="table table-bordred table-striped">
