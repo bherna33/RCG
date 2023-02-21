@@ -1,17 +1,3 @@
 {
-    "sqltools.connections": [
-        {
-            "mysqlOptions": {
-                "authProtocol": "default"
-            },
-            "previewLimit": 50,
-            "server": "localhost",
-            "port": 3306,
-            "driver": "MySQL",
-            "name": "RCG",
-            "database": "Employee",
-            "username": "branden",
-            "password": "T3chn0l0gy"
-        }
-    ]
+    "sqltools.connections": []
 }
