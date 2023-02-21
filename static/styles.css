@@ -145,3 +145,19 @@ html, body {
 .valid-feedback{
    color: #2acc80;
 }
+
+.container h4, tr, th, p{
+    color: white;
+}
+
+.container tr{
+    border: 3px solid #fff;
+}
+
+tbody{
+    color: white;
+}
+
+.spam .glyphicon .glyphicon-pencil{
+    color:white;
+}
