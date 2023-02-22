@@ -146,10 +146,6 @@
                     </form>
                   </td>
 
-                </tbody>
-                {%endfor%}
-                {%endblock%}
-                <tbody>
                   <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                       <div class="modal-content">
@@ -219,6 +215,11 @@
                       </div>
                     </div>
                   </div>
+
+                </tbody>
+                {%endfor%}
+                {%endblock%}
+                  
             </div>
           </div>
         </div>
@@ -265,8 +266,7 @@
 
       function toggle2(){
         let element = document.getElementById("job_title2");
-        let agdrop = document.getElementById("ag2");
-        console.log(element.value)
+        let agdrop = document.getElementById("ag2");        
         if (element.value == "DIRECT REP A" || element.value == "DIRECT REP B"){
           // remove attribute hidden
           if(agdrop.hasAttribute("hidden"))

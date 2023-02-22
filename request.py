@@ -28,15 +28,6 @@ def verify_post():
         insert(request.form['person_id'], request.form['first_name'], request.form['last_name'], request.form['email_address'], request.form['hire_date'], request.form['job_title'], "")
         return hello_world()
 
-# gets post using id
-# def get_post(post_id):
-#     conn = get_db_connection()
-#     post = conn.execute('SELECT * FROM Employee WHERE person_id = ?', (post_id)).fetchone()
-#     conn.close()
-#     if post is  None:
-#         abort(404)
-#     return post
-
 
 @app.route('/<person_id>', methods=['POST'])
 def delete(person_id):
@@ -47,20 +38,6 @@ def delete(person_id):
     # flash('"{}" was snapped away!'.format(post['first_name']))
     return redirect("/")
     
-
-
-# deletes employee by id number
-# @app.route('/<person_id>', methods=['GET'])
-# def delete(person_id):
-#     # return person_id
-#     # post = get_post(person_id)
-#     conn = get_db_connection()
-#     conn.execute('DELETE FROM Employee WHERE person_id = ?', (person_id,))
-#     conn.commit()
-#     conn.close()
-#     # flash('"{}" was snapped away!'.format(post['first_name']))
-#     return render_template("index.html")
- 
 
 saved_id= None
 
